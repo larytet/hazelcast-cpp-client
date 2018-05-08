@@ -19,7 +19,7 @@
 #include <string>
 #include <sstream>
 #include <stdint.h>
-//#define INT32_MAX 0xffffffff
+#define INT32_MAX 0xffffffff
 #include <boost/shared_ptr.hpp>
 
 #include "hazelcast/client/config/InMemoryFormat.h"
