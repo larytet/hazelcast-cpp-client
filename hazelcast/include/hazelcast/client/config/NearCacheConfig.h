@@ -16,10 +16,9 @@
 #ifndef HAZELCAST_CLIENT_CONFIG_NEARCACHECONFIG_H_
 #define HAZELCAST_CLIENT_CONFIG_NEARCACHECONFIG_H_
 
+#include <stdint.h>
 #include <string>
 #include <sstream>
-#include <stdint.h>
-#define INT32_MAX 0xffffffff
 #include <boost/shared_ptr.hpp>
 
 #include "hazelcast/client/config/InMemoryFormat.h"
