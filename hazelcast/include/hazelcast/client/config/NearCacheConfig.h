@@ -16,14 +16,26 @@
 #ifndef HAZELCAST_CLIENT_CONFIG_NEARCACHECONFIG_H_
 #define HAZELCAST_CLIENT_CONFIG_NEARCACHECONFIG_H_
 
+#ifdef __STDC_LIMIT_MACROS
+#undef __STDC_LIMIT_MACROS
+#endif
 
 #ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS 1
 #endif
 
+#ifdef __STDC_CONSTANT_MACROS
+#undef __STDC_CONSTANT_MACROS
+#endif
+
+#ifndef __STDC_CONSTANT_MACROS
+#define __STDC_CONSTANT_MACROS
+#endif
+
 #ifdef VERSION
 #undef VERSION
 #endif
+
 
 #include <stdint.h>
 #include <string>
