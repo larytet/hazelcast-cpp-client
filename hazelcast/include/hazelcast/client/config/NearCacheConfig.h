@@ -29,7 +29,7 @@
 #endif
 
 #ifndef __STDC_CONSTANT_MACROS
-#define __STDC_CONSTANT_MACROS
+#define __STDC_CONSTANT_MACROS 1
 #endif
 
 #ifdef VERSION
