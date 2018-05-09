@@ -17,8 +17,10 @@
 #define HAZELCAST_CLIENT_CONFIG_NEARCACHECONFIG_H_
 
 
-
+#ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS 1
+#endif
+
 #ifdef VERSION
 #undef VERSION
 #endif
