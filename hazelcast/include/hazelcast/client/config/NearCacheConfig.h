@@ -16,31 +16,18 @@
 #ifndef HAZELCAST_CLIENT_CONFIG_NEARCACHECONFIG_H_
 #define HAZELCAST_CLIENT_CONFIG_NEARCACHECONFIG_H_
 
-#ifdef __STDC_LIMIT_MACROS
-#undef __STDC_LIMIT_MACROS
-#endif
-
-#ifndef __STDC_LIMIT_MACROS
-#define __STDC_LIMIT_MACROS 1
-#endif
-
-#ifdef __STDC_CONSTANT_MACROS
-#undef __STDC_CONSTANT_MACROS
-#endif
-
-#ifndef __STDC_CONSTANT_MACROS
-#define __STDC_CONSTANT_MACROS 1
-#endif
-
 #ifdef VERSION
 #undef VERSION
 #endif
 
-
-#include <stdint.h>
 #include <string>
 #include <sstream>
 #include <boost/shared_ptr.hpp>
+
+#include <stdint.h>
+#ifndef INT32_MAX
+#define INT32_MAX 0xFFFFFFFF
+#endif
 
 #include "hazelcast/client/config/InMemoryFormat.h"
 #include "hazelcast/client/config/EvictionConfig.h"
