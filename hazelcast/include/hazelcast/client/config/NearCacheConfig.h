@@ -16,6 +16,13 @@
 #ifndef HAZELCAST_CLIENT_CONFIG_NEARCACHECONFIG_H_
 #define HAZELCAST_CLIENT_CONFIG_NEARCACHECONFIG_H_
 
+
+
+#define __STDC_LIMIT_MACROS 1
+#ifdef VERSION
+#undef VERSION
+#endif
+
 #include <stdint.h>
 #include <string>
 #include <sstream>
