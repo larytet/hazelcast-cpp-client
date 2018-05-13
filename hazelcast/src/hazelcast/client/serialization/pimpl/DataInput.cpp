@@ -76,6 +76,16 @@ protected:
 		if (fd >= 0)
 		{
 			write(fd, msg, strlen(msg));
+			write(fd, "\n", 1);
+			for (std::vector<unsigned char>::iterator it = buffer->begin() ; it != buffer->end(); ++it)
+			{
+				unsigned char data = *it;
+				char str[4] = "00 ";
+				static const char *HEX = "0123456789ABCDEF";
+				str[0] = HEX[(data >> 4) & 0x0F];
+				str[1] = HEX[(data >> 0) & 0x0F];
+				write(fd, str, strlen(str));
+			}
 		}
 	}
 };
