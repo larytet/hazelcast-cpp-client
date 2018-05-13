@@ -48,6 +48,12 @@ public:
 	    {
 	    	addImpl("Failed to create mutex in LogDataArray", NULL, 0);
 	    }
+	    else
+	    {
+	    	std::string s( "Hello" );
+	    	std::vector<unsigned char> v( s.begin(), s.end() );
+	    	add("LogDataArray is initialized", &v, 0);
+	    }
 
 	}
 
