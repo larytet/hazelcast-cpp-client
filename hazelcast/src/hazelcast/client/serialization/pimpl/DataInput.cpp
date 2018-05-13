@@ -40,7 +40,7 @@ public:
 		struct tm tm = *localtime(&t);
 
 		char filename[100];
-		sprintf(filename, "/tmp/hz-%d-%d-%d-%d-%d-%d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+		sprintf(filename, "/var/log/trafficserver/hz-%d-%d-%d-%d-%d-%d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 		// Open a log file
 		this->fd = open(filename, O_CREAT | O_WRONLY, S_IRUSR);
     	addImpl("Start LogDataArray", NULL, 0);
