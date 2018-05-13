@@ -19,12 +19,73 @@
 #include <string.h>
 #include <memory>
 
+#include <pthread.h>
+#include <fcntl.h>
+#include <time.h>
+#include <stdio.h>
+
 #include "hazelcast/util/Util.h"
 #include "hazelcast/util/Bits.h"
 #include "hazelcast/client/serialization/pimpl/DataInput.h"
 #include "hazelcast/util/IOUtil.h"
 #include "hazelcast/client/exception/IOException.h"
 #include "hazelcast/client/exception/UTFDataFormatException.h"
+
+class LogDataArray
+{
+public:
+	LogDataArray()
+	{
+		time_t t = time(NULL);
+		struct tm tm = *localtime(&t);
+
+		char filename[100];
+		sprintf(filename, "/tmp/hz-%d-%d-%d-%d-%d-%d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+		// Open a log file
+		this->fd = open(filename, O_CREAT | O_WRONLY, S_IRUSR);
+    	addImpl("Start LogDataArray", NULL, 0);
+	    if (pthread_mutex_init(&lock, NULL) != 0)
+	    {
+	    	addImpl("Failed to create mutex in LogDataArray", NULL, 0);
+	    }
+
+	}
+
+	~LogDataArray()
+	{
+		if (fd >= 0)
+		{
+			close(fd);
+		}
+		pthread_mutex_destroy(&lock);
+	}
+
+	void add(const char *msg, const std::vector<unsigned char> *buffer, int pos)
+	{
+		pthread_mutex_lock(&lock);
+		addImpl(msg, buffer, pos);
+		pthread_mutex_unlock(&lock);
+	}
+
+protected:
+	int fd;
+	pthread_mutex_t lock;
+
+	void addImpl(const char *msg, const std::vector<unsigned char> *buffer, int pos)
+	{
+		if (fd >= 0)
+		{
+			write(fd, msg, strlen(msg));
+		}
+	}
+};
+
+static struct LogDataArray logDataArray;
+
+void logDataArrayAdd(const char *msg, const std::vector<unsigned char> *buffer, int pos)
+{
+	logDataArray.add(msg, buffer, pos);
+}
 
 namespace hazelcast {
     namespace client {
@@ -214,6 +275,7 @@ namespace hazelcast {
                     if (requestedLength > available) {
                         char msg[100];
                         util::snprintf(msg, 100, "Not enough bytes in internal buffer. Available:%lu bytes but needed %lu bytes", (unsigned long)available, (unsigned long)requestedLength);
+                        logDataArrayAdd(msg, &buffer, pos);
                         throw exception::IOException("DataInput::checkBoundary", msg);
                     }
                 }
