@@ -111,6 +111,14 @@ protected:
 			str[1] = HEX[(data >> 0) & 0x0F];
 			write(fd, str, strlen(str));
 		}
+		for (std::vector<unsigned char>::const_iterator it = buffer->begin() ; it != buffer->end(); ++it)
+		{
+			unsigned char data = *it;
+			if (!((data > 0x1f) && (data < 0x7F)))
+				data = '?';
+
+			write(fd, &data, 1);
+		}
 
 	}
 };
