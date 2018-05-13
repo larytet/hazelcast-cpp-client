@@ -82,9 +82,13 @@ protected:
 		if (fd >= 0)
 		{
 			char str[128];
-			int count = snprintf(str, sizeof(str), "%s, pos=%d\n", msg, pos);
+			time_t t = time(NULL);
+			struct tm tm = *localtime(&t);
+			int count = snprintf(str, sizeof(str), "%d-%d-%d %02d:%02d:%02d %s, pos=%d ",
+					tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec, msg, pos);
 			write(fd, str, count);
 			writeByteVector(buffer);
+			write(fd, "\n", 1);
 		}
 	}
 
@@ -92,6 +96,7 @@ protected:
 	{
 		if (buffer == NULL)
 		{
+			const char str[] = "Contains no data";
 			return;
 		}
 
