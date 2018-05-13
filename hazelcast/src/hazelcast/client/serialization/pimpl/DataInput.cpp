@@ -84,6 +84,11 @@ protected:
 
 	void writeByteVector(const std::vector<unsigned char> *buffer)
 	{
+		if (buffer == NULL)
+		{
+			return;
+		}
+
 		for (std::vector<unsigned char>::const_iterator it = buffer->begin() ; it != buffer->end(); ++it)
 		{
 			unsigned char data = *it;
