@@ -75,18 +75,25 @@ protected:
 	{
 		if (fd >= 0)
 		{
-			write(fd, msg, strlen(msg));
-			write(fd, "\n", 1);
-			for (std::vector<unsigned char>::iterator it = buffer->begin() ; it != buffer->end(); ++it)
-			{
-				unsigned char data = *it;
-				char str[4] = "00 ";
-				static const char *HEX = "0123456789ABCDEF";
-				str[0] = HEX[(data >> 4) & 0x0F];
-				str[1] = HEX[(data >> 0) & 0x0F];
-				write(fd, str, strlen(str));
-			}
+			char str[128];
+			int count = snprintf(str, sizeof(str), "%s, pos=%d\n", msg, pos);
+			write(fd, str, count);
+			writeByteVector(buffer);
 		}
+	}
+
+	void writeByteVector(const std::vector<unsigned char> *buffer)
+	{
+		for (std::vector<unsigned char>::const_iterator it = buffer->begin() ; it != buffer->end(); ++it)
+		{
+			unsigned char data = *it;
+			char str[4] = "00 ";
+			static const char *HEX = "0123456789ABCDEF";
+			str[0] = HEX[(data >> 4) & 0x0F];
+			str[1] = HEX[(data >> 0) & 0x0F];
+			write(fd, str, strlen(str));
+		}
+
 	}
 };
 
