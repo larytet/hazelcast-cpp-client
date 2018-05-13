@@ -50,7 +50,7 @@ public:
 	    }
 	    else
 	    {
-	    	std::string s( "Hello" );
+	    	std::string s("Hello");
 	    	std::vector<unsigned char> v( s.begin(), s.end() );
 	    	add("LogDataArray is initialized", &v, 0);
 	    }
@@ -95,6 +95,8 @@ protected:
 			return;
 		}
 
+		const char str[] = "Data:";
+		write(fd, str, strlen(str));
 		for (std::vector<unsigned char>::const_iterator it = buffer->begin() ; it != buffer->end(); ++it)
 		{
 			unsigned char data = *it;
