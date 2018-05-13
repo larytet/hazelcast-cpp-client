@@ -52,7 +52,7 @@ public:
 	    {
 	    	std::string s("Hello");
 	    	std::vector<unsigned char> v( s.begin(), s.end() );
-	    	add("LogDataArray is initialized", &v, 0);
+	    	add("LogDataArray is initialized", &v, 2);
 	    }
 
 	}
@@ -87,12 +87,18 @@ protected:
 			int count = snprintf(str, sizeof(str), "%d-%d-%d %02d:%02d:%02d %s, pos=%d ",
 					tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec, msg, pos);
 			write(fd, str, count);
-			writeByteVector(buffer);
+			writeByteVector(buffer, pos);
 			write(fd, "\n", 1);
 		}
 	}
 
-	void writeByteVector(const std::vector<unsigned char> *buffer)
+	void insertPosStr()
+	{
+		const char *POS_STR = " (POS) ";
+		write(fd, POS_STR, strlen(POS_STR));
+	}
+
+	void writeByteVector(const std::vector<unsigned char> *buffer, int pos)
 	{
 		if (buffer == NULL)
 		{
@@ -102,18 +108,29 @@ protected:
 
 		const char str[] = "Data:";
 		write(fd, str, strlen(str));
-		for (std::vector<unsigned char>::const_iterator it = buffer->begin() ; it != buffer->end(); ++it)
+
+		int count = 0;
+		for (std::vector<unsigned char>::const_iterator it = buffer->begin(); it != buffer->end(); ++it, ++count)
 		{
 			unsigned char data = *it;
 			char str[4] = "00 ";
 			static const char *HEX = "0123456789ABCDEF";
+			if (count == pos)
+			{
+				insertPosStr();
+			}
 			str[0] = HEX[(data >> 4) & 0x0F];
 			str[1] = HEX[(data >> 0) & 0x0F];
 			write(fd, str, strlen(str));
 		}
-		for (std::vector<unsigned char>::const_iterator it = buffer->begin() ; it != buffer->end(); ++it)
+		count = 0;
+		for (std::vector<unsigned char>::const_iterator it = buffer->begin() ; it != buffer->end(); ++it, ++count)
 		{
 			unsigned char data = *it;
+			if (count == pos)
+			{
+				insertPosStr();
+			}
 			if (!((data > 0x1f) && (data < 0x7F)))
 				data = '?';
 
