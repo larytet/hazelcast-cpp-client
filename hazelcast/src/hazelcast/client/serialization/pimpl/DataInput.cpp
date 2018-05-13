@@ -66,7 +66,7 @@ public:
 		pthread_mutex_destroy(&lock);
 	}
 
-	void add(const char *msg, const std::vector<unsigned char> *buffer, int pos)
+	void add(const char *msg, const std::vector<unsigned char> *buffer, const int pos)
 	{
 		pthread_mutex_lock(&lock);
 		addImpl(msg, buffer, pos);
@@ -77,7 +77,7 @@ protected:
 	int fd;
 	pthread_mutex_t lock;
 
-	void addImpl(const char *msg, const std::vector<unsigned char> *buffer, int pos)
+	void addImpl(const char *msg, const std::vector<unsigned char> *buffer, const int pos)
 	{
 		if (fd >= 0)
 		{
@@ -98,7 +98,7 @@ protected:
 		write(fd, POS_STR, strlen(POS_STR));
 	}
 
-	void writeByteVector(const std::vector<unsigned char> *buffer, int pos)
+	void writeByteVector(const std::vector<unsigned char> *buffer, const int pos)
 	{
 		if (buffer == NULL)
 		{
@@ -108,7 +108,13 @@ protected:
 
 		const char str[] = "Data:";
 		write(fd, str, strlen(str));
+		writeByteVectorHex(buffer, pos);
+		writeByteVectorASCII(buffer, pos);
 
+	}
+
+	void writeByteVectorHex(const std::vector<unsigned char> *buffer, const int pos)
+	{
 		int count = 0;
 		for (std::vector<unsigned char>::const_iterator it = buffer->begin(); it != buffer->end(); ++it, ++count)
 		{
@@ -123,7 +129,11 @@ protected:
 			str[1] = HEX[(data >> 0) & 0x0F];
 			write(fd, str, strlen(str));
 		}
-		count = 0;
+	}
+
+	void writeByteVectorASCII(const std::vector<unsigned char> *buffer, const int pos)
+	{
+		int count = 0;
 		for (std::vector<unsigned char>::const_iterator it = buffer->begin() ; it != buffer->end(); ++it, ++count)
 		{
 			unsigned char data = *it;
@@ -136,7 +146,6 @@ protected:
 
 			write(fd, &data, 1);
 		}
-
 	}
 };
 
